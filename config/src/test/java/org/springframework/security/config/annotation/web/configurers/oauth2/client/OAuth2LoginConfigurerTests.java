@@ -399,7 +399,7 @@ public class OAuth2LoginConfigurerTests {
 
 		this.springSecurityFilterChain.doFilter(this.request, this.response, this.filterChain);
 
-		assertThat(this.response.getRedirectedUrl()).matches("http://localhost/login");
+		assertThat(this.response.getRedirectedUrl()).matches("http://localhost/oauth2/authorization/google");
 	}
 
 	// gh-5347
