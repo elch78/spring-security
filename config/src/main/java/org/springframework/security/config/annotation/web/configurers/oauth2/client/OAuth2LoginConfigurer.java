@@ -694,20 +694,13 @@ public final class OAuth2LoginConfigurer<B extends HttpSecurityBuilder<B>> exten
 	}
 
 	private AuthenticationEntryPoint getLoginEntryPoint(B http, String providerLoginPage) {
-		// !xhr && !((loginpage || favicon) && defaultEntrypoint)
-
-
-		RequestMatcher notXRequestedWith = new NegatedRequestMatcher(
-				new RequestHeaderRequestMatcher("X-Requested-With", "XMLHttpRequest"));
-
-
-		LoginUrlAuthenticationEntryPoint providerLoginEntryPoint = new LoginUrlAuthenticationEntryPoint(providerLoginPage);
-
+		RequestMatcher xhrRequestedWith = new RequestHeaderRequestMatcher("X-Requested-With", "XMLHttpRequest");
 		LinkedHashMap<RequestMatcher, AuthenticationEntryPoint> entryPoints = new LinkedHashMap<>();
-		entryPoints.put(notXRequestedWith,
-				providerLoginEntryPoint);
+		entryPoints.put(xhrRequestedWith, this.getAuthenticationEntryPoint());
 
 		DelegatingAuthenticationEntryPoint loginEntryPoint = new DelegatingAuthenticationEntryPoint(entryPoints);
+
+		LoginUrlAuthenticationEntryPoint providerLoginEntryPoint = new LoginUrlAuthenticationEntryPoint(providerLoginPage);
 		loginEntryPoint.setDefaultEntryPoint(providerLoginEntryPoint);
 
 		return loginEntryPoint;

@@ -389,7 +389,7 @@ public class OAuth2LoginConfigurerTests {
 
 	// gh-5347
 	@Test
-	public void oauth2LoginWithOneClientConfiguredAndRequestFaviconNotAuthenticatedThenRedirectDefaultLoginPage() throws Exception {
+	public void oauth2LoginWithOneClientConfiguredAndRequestFaviconNotAuthenticatedThenRedirectForAuthorization() throws Exception {
 		loadConfig(OAuth2LoginConfig.class);
 
 		String requestUri = "/favicon.ico";
@@ -418,7 +418,7 @@ public class OAuth2LoginConfigurerTests {
 
 	// gh-6812
 	@Test
-	public void oauth2LoginWithOneClientConfiguredAndRequestXHRNotAuthenticatedThenDoesNotRedirectForAuthorization() throws Exception {
+	public void oauth2LoginWithOneClientConfiguredAndRequestXHRNotAuthenticatedThenRedirectDefaultLoginPage() throws Exception {
 		loadConfig(OAuth2LoginConfig.class);
 
 		String requestUri = "/";
@@ -428,7 +428,7 @@ public class OAuth2LoginConfigurerTests {
 
 		this.springSecurityFilterChain.doFilter(this.request, this.response, this.filterChain);
 
-		assertThat(this.response.getRedirectedUrl()).doesNotMatch("http://localhost/oauth2/authorization/google");
+		assertThat(this.response.getRedirectedUrl()).matches("http://localhost/login");
 	}
 
 	@Test
